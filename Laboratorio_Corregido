@@ -66,7 +66,7 @@ class AVLTree:
         updateHeight(node)
         balance = getBalance(node)
 
-        # Rotaciones según los casos de desequilibrio
+        # Casos de rotación
         if balance > 1 and value < node.left.value:
             return rotate_right(node)
         if balance < -1 and value > node.right.value:
@@ -92,7 +92,7 @@ class AVLTree:
         elif value > node.value:
             node.right = self._delete_recursive(node.right, value)
         else:
-            # Nodo con un hijo o sin hijos
+            # Nodo con uno o cero hijos
             if not node.left:
                 return node.right
             elif not node.right:
@@ -106,7 +106,7 @@ class AVLTree:
         updateHeight(node)
         balance = getBalance(node)
 
-        # Rotaciones para mantener balance
+        # Rotaciones
         if balance > 1 and getBalance(node.left) >= 0:
             return rotate_right(node)
         if balance > 1 and getBalance(node.left) < 0:
@@ -136,18 +136,20 @@ class AVLTree:
             result.append(node.value)
             self._in_order(node.right, result)
 
-    # Visualización simple (opcional)
+    # Visualización del árbol
     def print_tree(self, node=None, indent="", last=True):
-        if node is None:
+        if node is None and indent == "":
             node = self.root
-        if node:
-            print(indent, "`- " if last else "|- ", node.value, f"(h={node.height}, b={getBalance(node)})", sep="")
-            indent += " " if last else "| "
-            self.print_tree(node.left, indent, False)
-            self.print_tree(node.right, indent, True)
+        if node is None:
+            return
+
+        print(indent, "`- " if last else "|- ", node.value, f"(h={node.height}, b={getBalance(node)})", sep="")
+        indent += " " if last else "| "
+        self.print_tree(node.left, indent, False)
+        self.print_tree(node.right, indent, True)
 
 
-# Ejemplo de uso:
+# Ejemplo de uso
 if __name__ == "__main__":
     avl = AVLTree()
     values = [10, 20, 30, 40, 50, 25]
@@ -158,7 +160,6 @@ if __name__ == "__main__":
     print("\nEstructura del Árbol AVL:")
     avl.print_tree()
 
-    # Eliminar un nodo
     avl.delete(40)
     print("\nDespués de eliminar 40:")
     avl.print_tree()
